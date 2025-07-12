@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Moniteur de Système et Journaux</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/socket.io@4.7.5/client-dist/socket.io.min.js"></script>
+</head>
+<body>
+    <h1>Moniteur de Système</h1>
+    <div id="performance">
+        <h2>Performances</h2>
+        <p>CPU: <span id="cpu">...</span>%</p>
+        <p>RAM: <span id="ram">...</span>%</p>
+        <p>GPU: <span id="gpu">...</span>%</p>
+        <p>Mémoire GPU: <span id="gpu-memory">...</span>%</p>
+    </div>
+    <div id="logs">
+        <h2>Journaux</h2>
+        <label for="level-filter">Filtrer par niveau: </label>
+        <select id="level-filter">
+            <option value="">Tous</option>
+            <option value="DEBUG">DEBUG</option>
+            <option value="INFO">INFO</option>
+            <option value="WARNING">WARNING</option>
+            <option value="ERROR">ERROR</option>
+            <option value="CRITICAL">CRITICAL</option>
+        </select>
+        <button onclick="clearLogs()">Supprimer les journaux</button>
+        <ul id="log-list"></ul>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

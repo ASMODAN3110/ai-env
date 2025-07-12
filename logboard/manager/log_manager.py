@@ -1,9 +1,11 @@
 import os
 import json
 
+from pathlib import Path
 from model.log import Log
 from typing import List, Optional, Dict, Any
 
+BASE_DIR = Path(__file__).resolve().parent
 
 class LogManager:
     """Gère les journaux dans un fichier JSON.
@@ -15,7 +17,7 @@ class LogManager:
         log_file (str): Chemin complet vers le fichier JSON des journaux.
     """
 
-    def __init__(self, directory: str = ".") -> None:
+    def __init__(self, directory: str = BASE_DIR) -> None:
         """Initialise le gestionnaire de journaux.
 
         Args:
