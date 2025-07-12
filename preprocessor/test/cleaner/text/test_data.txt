@@ -1,0 +1,5 @@
+Bonjour le monde!!!
+Test with numbers 123 and symbols *%&
+Empty line follows:
+
+Another LINE with spaces
