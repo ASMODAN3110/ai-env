@@ -2,21 +2,23 @@ import json
 import pandas as pd
 from pathlib import Path
 
+#TODO Inclure le log vers mon logger
 
 def load_text_data(file_path, encoding='utf-8', txt_column_name="text"):
     """
-    Loads text data into a pandas DataFrame from various portable formats.
+        Charge les données textuelles dans un DataFrame pandas à partir de différents formats portables.
 
-    Supported formats: .csv, .tsv, .json, .jsonl, .txt, .parquet, .pkl
+        Formats pris en charge : .csv, .tsv, .json, .jsonl, .txt, .parquet, .pkl
 
-    Parameters:
-        file_path (str or Path): Path to the file
-        encoding (str): File encoding, default 'utf-8'
-        txt_column_name (str): Column name to use for plain .txt files
+        Paramètres :
+            file_path (str ou Path) : Chemin vers le fichier
+            encoding (str) : Encodage du fichier, par défaut 'utf-8'
+            txt_column_name (str) : Nom de la colonne à utiliser pour les fichiers .txt simples
 
-    Returns:
-        pd.DataFrame: Loaded text data
+        Retourne :
+            pd.DataFrame : Données textuelles chargées
     """
+
     file_path = Path(file_path)
     ext = file_path.suffix.lower()
 
