@@ -69,8 +69,8 @@ def main_text_cleaning(input_path, output_path, text_column='text'):
             save_cleaned_text_data(cleaned_df, output_path)
 
 if __name__ == "__main__":
-    #input_file = r"..\..\test\cleaner\text\test_data.json"  # Chemin du fichier de test
-    #input_file = r"..\..\test\cleaner\text\test_data.csv"  # Chemin du fichier de test
-    input_file = r"..\..\test\cleaner\text\test_data.txt"  # Chemin du fichier de test
+    input_file = r"..\test\cleaner\text\test_data.json"  # Chemin du fichier de test
+    #input_file = r"..\test\cleaner\text\test_data.csv"  # Chemin du fichier de test
+    #input_file = r"..\test\cleaner\text\test_data.txt"  # Chemin du fichier de test
     output_file = "cleaned_test_data.csv"  # Chemin du fichier de sortie
     main_text_cleaning(input_file, output_file)
