@@ -71,6 +71,15 @@ def handle_connect():
     """Gère la connexion d'un client WebSocket."""
     emit("message", {"data": "Connecté au serveur WebSocket"})
 
+def start_server():
+    """
+    Demarer le serveur pour afficher les logs
+    :return:
+    """
+    threading.Thread(target=send_performance_periodically, daemon=True).start()
+    socketio.run(app, host="0.0.0.0", port=5000, debug=True, allow_unsafe_werkzeug=True)
+
+
 if __name__ == "__main__":
     # Lancer le thread pour envoyer les performances périodiquement
     add_sample_logs()
