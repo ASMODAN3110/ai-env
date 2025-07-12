@@ -3,33 +3,208 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Moniteur de Système et Journaux</title>
+    <title>Moniteur de Système Professionnel</title>
     <link rel="stylesheet" href="styles.css">
+    <!-- External Dependencies -->
     <script src="https://cdn.jsdelivr.net/npm/socket.io@4.7.5/client-dist/socket.io.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.min.js"></script>
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-    <h1>Moniteur de Système</h1>
-    <div id="performance">
-        <h2>Performances</h2>
-        <p>CPU: <span id="cpu">...</span>%</p>
-        <p>RAM: <span id="ram">...</span>%</p>
-        <p>GPU: <span id="gpu">...</span>%</p>
-        <p>Mémoire GPU: <span id="gpu-memory">...</span>%</p>
+    <!-- Header Section -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <i class="fas fa-desktop"></i>
+                <h1>Moniteur Système Pro</h1>
+            </div>
+            <div class="header-controls">
+                <button id="theme-toggle" class="theme-toggle" aria-label="Basculer le thème">
+                    <i class="fas fa-moon"></i>
+                </button>
+                <div class="connection-status" id="connection-status">
+                    <i class="fas fa-circle"></i>
+                    <span>Déconnecté</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Dashboard Container -->
+    <main class="dashboard">
+        <!-- Performance Metrics Section -->
+        <section class="performance-section">
+            <div class="section-header">
+                <h2><i class="fas fa-chart-line"></i> Performances Système</h2>
+                <div class="refresh-indicator" id="refresh-indicator">
+                    <i class="fas fa-sync-alt"></i>
+                </div>
+            </div>
+
+            <!-- Performance Cards Grid -->
+            <div class="metrics-grid">
+                <!-- CPU Card -->
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <div class="metric-icon cpu-icon">
+                            <i class="fas fa-microchip"></i>
+                        </div>
+                        <div class="metric-info">
+                            <h3>Processeur</h3>
+                            <span class="metric-value" id="cpu-value">0%</span>
+                        </div>
+                    </div>
+                    <div class="metric-chart">
+                        <canvas id="cpu-chart"></canvas>
+                    </div>
+                    <div class="metric-status" id="cpu-status">Normal</div>
+                </div>
+
+                <!-- RAM Card -->
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <div class="metric-icon ram-icon">
+                            <i class="fas fa-memory"></i>
+                        </div>
+                        <div class="metric-info">
+                            <h3>Mémoire RAM</h3>
+                            <span class="metric-value" id="ram-value">0%</span>
+                        </div>
+                    </div>
+                    <div class="metric-chart">
+                        <canvas id="ram-chart"></canvas>
+                    </div>
+                    <div class="metric-status" id="ram-status">Normal</div>
+                </div>
+
+                <!-- GPU Card -->
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <div class="metric-icon gpu-icon">
+                            <i class="fas fa-tv"></i>
+                        </div>
+                        <div class="metric-info">
+                            <h3>Processeur Graphique</h3>
+                            <span class="metric-value" id="gpu-value">N/A</span>
+                        </div>
+                    </div>
+                    <div class="metric-chart">
+                        <canvas id="gpu-chart"></canvas>
+                    </div>
+                    <div class="metric-status" id="gpu-status">N/A</div>
+                </div>
+
+                <!-- GPU Memory Card -->
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <div class="metric-icon gpu-memory-icon">
+                            <i class="fas fa-hdd"></i>
+                        </div>
+                        <div class="metric-info">
+                            <h3>Mémoire GPU</h3>
+                            <span class="metric-value" id="gpu-memory-value">N/A</span>
+                        </div>
+                    </div>
+                    <div class="metric-chart">
+                        <canvas id="gpu-memory-chart"></canvas>
+                    </div>
+                    <div class="metric-status" id="gpu-memory-status">N/A</div>
+                </div>
+            </div>
+
+            <!-- System Overview Chart -->
+            <div class="overview-chart-container">
+                <div class="chart-header">
+                    <h3><i class="fas fa-chart-area"></i> Vue d'ensemble des performances</h3>
+                    <div class="chart-controls">
+                        <button class="chart-control-btn active" data-timeframe="1m">1m</button>
+                        <button class="chart-control-btn" data-timeframe="5m">5m</button>
+                        <button class="chart-control-btn" data-timeframe="15m">15m</button>
+                    </div>
+                </div>
+                <div class="overview-chart">
+                    <canvas id="overview-chart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- Logs Section -->
+        <section class="logs-section">
+            <div class="section-header">
+                <h2><i class="fas fa-file-alt"></i> Journaux Système</h2>
+                <div class="logs-controls">
+                    <div class="filter-group">
+                        <label for="level-filter">
+                            <i class="fas fa-filter"></i>
+                            Niveau:
+                        </label>
+                        <select id="level-filter" class="filter-select">
+                            <option value="">Tous les niveaux</option>
+                            <option value="DEBUG">DEBUG</option>
+                            <option value="INFO">INFO</option>
+                            <option value="WARNING">WARNING</option>
+                            <option value="ERROR">ERROR</option>
+                            <option value="CRITICAL">CRITICAL</option>
+                        </select>
+                    </div>
+                    <button id="clear-logs-btn" class="action-btn danger">
+                        <i class="fas fa-trash"></i>
+                        Vider les journaux
+                    </button>
+                    <button id="refresh-logs-btn" class="action-btn">
+                        <i class="fas fa-sync"></i>
+                        Actualiser
+                    </button>
+                </div>
+            </div>
+
+            <!-- Logs Statistics -->
+            <div class="logs-stats">
+                <div class="stat-item">
+                    <span class="stat-label">Total:</span>
+                    <span class="stat-value" id="total-logs">0</span>
+                </div>
+                <div class="stat-item error">
+                    <span class="stat-label">Erreurs:</span>
+                    <span class="stat-value" id="error-logs">0</span>
+                </div>
+                <div class="stat-item warning">
+                    <span class="stat-label">Avertissements:</span>
+                    <span class="stat-value" id="warning-logs">0</span>
+                </div>
+            </div>
+
+            <!-- Logs Container -->
+            <div class="logs-container">
+                <div class="logs-header">
+                    <div class="log-column">Horodatage</div>
+                    <div class="log-column">Niveau</div>
+                    <div class="log-column">Module</div>
+                    <div class="log-column">Message</div>
+                    <div class="log-column">Contexte</div>
+                </div>
+                <div class="logs-list" id="logs-list">
+                    <div class="no-logs">
+                        <i class="fas fa-inbox"></i>
+                        <p>Aucun journal disponible</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loading-overlay">
+        <div class="loading-spinner">
+            <i class="fas fa-cog fa-spin"></i>
+            <p>Chargement des données...</p>
+        </div>
     </div>
-    <div id="logs">
-        <h2>Journaux</h2>
-        <label for="level-filter">Filtrer par niveau: </label>
-        <select id="level-filter">
-            <option value="">Tous</option>
-            <option value="DEBUG">DEBUG</option>
-            <option value="INFO">INFO</option>
-            <option value="WARNING">WARNING</option>
-            <option value="ERROR">ERROR</option>
-            <option value="CRITICAL">CRITICAL</option>
-        </select>
-        <button onclick="clearLogs()">Supprimer les journaux</button>
-        <ul id="log-list"></ul>
-    </div>
-    <script src="script.js"></script>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+    <script src="script.js" defer></script>
 </body>
 </html>

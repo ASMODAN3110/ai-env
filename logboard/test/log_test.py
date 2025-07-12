@@ -1,7 +1,6 @@
 import json
 import unittest
 
-from datetime import datetime
 from model.log import Log, LogLevel
 
 class TestLog(unittest.TestCase):
