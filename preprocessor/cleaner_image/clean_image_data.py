@@ -54,6 +54,6 @@ def clean_image_directory(input_dir, output_dir, target_size=(224, 224)):
     return processed_images
 
 if __name__ == "__main__":
-    input_directory = r"..\..\test\cleaner\image"  # Remplacer par votre dossier d'images
+    input_directory = r"..\test\cleaner\image"  # Remplacer par votre dossier d'images
     output_directory = "cleaned_test_images"  # Remplacer par le dossier de sortie
     clean_image_directory(input_directory, output_directory)
