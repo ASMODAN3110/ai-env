@@ -1,0 +1,41 @@
+{
+    "paths": {
+        "base_dir": "D:\\Ecole\\Formation personnelle\\Projets personnels\\X2\\IA\\IA pour texte et image\\ai-env",
+        "data_dir": "D:\\Ecole\\Formation personnelle\\Projets personnels\\X2\\IA\\IA pour texte et image\\ai-env\\data",
+        "artifacts_dir": "D:\\Ecole\\Formation personnelle\\Projets personnels\\X2\\IA\\IA pour texte et image\\ai-env\\artifacts"
+    },
+    "data": {
+        "raw_path": "D:\\Ecole\\Formation personnelle\\Projets personnels\\X2\\IA\\IA pour texte et image\\ai-env\\data\\raw\\data.csv",
+        "processed_path": "D:\\Ecole\\Formation personnelle\\Projets personnels\\X2\\IA\\IA pour texte et image\\ai-env\\data\\processed\\data.csv",
+        "required_columns": "",
+        "label_columns": "",
+        "min_samples": "1",
+        "augment": "",
+        "balance_classes": ""
+    },
+    "processing": {
+        "max_words": "1000",
+        "max_len": "20",
+        "test_size": "0.2",
+        "random_state": "42",
+        "stratify": "",
+        "validate": "",
+        "max_permutations": "1"
+    },
+    "model": {
+        "embedding_dim": "16",
+        "hidden_units": "128",
+        "emotion_units": "",
+        "activation": "",
+        "epochs": "100",
+        "batch_size": "16",
+        "dropout_rate": "0.3",
+        "output_paths": {
+            "tokenizer": "D:\\Ecole\\Formation personnelle\\Projets personnels\\X2\\IA\\IA pour texte et image\\ai-env\\artifacts\\tokenizer.pkl",
+            "encoder": "D:\\Ecole\\Formation personnelle\\Projets personnels\\X2\\IA\\IA pour texte et image\\ai-env\\artifacts\\encoder.pkl",
+            "model": "D:\\Ecole\\Formation personnelle\\Projets personnels\\X2\\IA\\IA pour texte et image\\ai-env\\artifacts\\model.keras",
+            "tflite": "D:\\Ecole\\Formation personnelle\\Projets personnels\\X2\\IA\\IA pour texte et image\\ai-env\\artifacts\\model.tflite",
+            "undefined": "D:\\Ecole\\Formation personnelle\\Projets personnels\\X2\\IA\\IA pour texte et image\\ai-env\\artifacts\\model.tflite"
+        }
+    }
+}
