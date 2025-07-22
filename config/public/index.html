@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Project Configuration Editor</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="styles.css" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <i class="fas fa-brain me-2"></i>
+                AI Config Editor
+            </a>
+            <div class="navbar-nav ms-auto">
+                <button class="btn btn-outline-light me-2" id="loadBtn">
+                    <i class="fas fa-download me-1"></i>Load Config
+                </button>
+                <button class="btn btn-success" id="saveBtn">
+                    <i class="fas fa-save me-1"></i>Save Config
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <!-- Status Alert -->
+        <div id="alertContainer"></div>
+
+        <!-- Loading Spinner -->
+        <div id="loadingSpinner" class="text-center py-5" style="display: none;">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+            <p class="mt-2">Loading configuration...</p>
+        </div>
+
+        <!-- Configuration Form -->
+        <form id="configForm" style="display: none;">
+            <!-- Data Configuration -->
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-database me-2"></i>Data Configuration
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-check form-switch mb-3">
+                                <input class="form-check-input" type="checkbox" id="augment">
+                                <label class="form-check-label" for="augment">
+                                    <strong>Data Augmentation</strong>
+                                    <small class="text-muted d-block">Enable data augmentation techniques</small>
+                                </label>
+                            </div>
+                            <div class="form-check form-switch mb-3">
+                                <input class="form-check-input" type="checkbox" id="balance_classes">
+                                <label class="form-check-label" for="balance_classes">
+                                    <strong>Balance Classes</strong>
+                                    <small class="text-muted d-block">Automatically balance class distribution</small>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="task_type" class="form-label">Task Type</label>
+                                <select class="form-select" id="task_type">
+                                    <option value="text_classification">Text Classification</option>
+                                    <option value="image_classification">Image Classification</option>
+                                    <option value="multimodal">Multimodal</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="min_samples" class="form-label">Minimum Samples</label>
+                                <input type="number" class="form-control" id="min_samples" min="1">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Image Data Section -->
+                    <h6 class="text-primary mt-4 mb-3">
+                        <i class="fas fa-image me-2"></i>Image Data Settings
+                    </h6>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label for="color_mode" class="form-label">Color Mode</label>
+                                <select class="form-select" id="color_mode">
+                                    <option value="rgb">RGB</option>
+                                    <option value="grayscale">Grayscale</option>
+                                    <option value="rgba">RGBA</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label for="image_format" class="form-label">Image Format</label>
+                                <select class="form-select" id="image_format">
+                                    <option value="jpg">JPG</option>
+                                    <option value="png">PNG</option>
+                                    <option value="bmp">BMP</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label for="resize_width" class="form-label">Resize Width</label>
+                                <input type="number" class="form-control" id="resize_width" min="1">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label for="resize_height" class="form-label">Resize Height</label>
+                                <input type="number" class="form-control" id="resize_height" min="1">
+                            </div>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="mb-3">
+                                <label for="image_dir" class="form-label">Image Directory</label>
+                                <input type="text" class="form-control" id="image_dir">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="labels_file" class="form-label">Labels File Path</label>
+                        <input type="text" class="form-control" id="labels_file">
+                    </div>
+
+                    <!-- Text Data Section -->
+                    <h6 class="text-primary mt-4 mb-3">
+                        <i class="fas fa-file-text me-2"></i>Text Data Settings
+                    </h6>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="raw_path" class="form-label">Raw Data Path</label>
+                                <input type="text" class="form-control" id="raw_path">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="processed_path" class="form-label">Processed Data Path</label>
+                                <input type="text" class="form-control" id="processed_path">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Model Configuration -->
+            <div class="card mb-4">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-cogs me-2"></i>Model Configuration
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label for="architecture" class="form-label">Architecture</label>
+                                <select class="form-select" id="architecture">
+                                    <option value="lstm">LSTM</option>
+                                    <option value="cnn">CNN</option>
+                                    <option value="transformer">Transformer</option>
+                                    <option value="hybrid">Hybrid</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label for="batch_size" class="form-label">Batch Size</label>
+                                <input type="number" class="form-control" id="batch_size" min="1">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label for="epochs" class="form-label">Epochs</label>
+                                <input type="number" class="form-control" id="epochs" min="1">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="dropout_rate" class="form-label">Dropout Rate</label>
+                        <input type="range" class="form-range" id="dropout_rate" min="0" max="1" step="0.1">
+                        <div class="d-flex justify-content-between">
+                            <small>0.0</small>
+                            <small id="dropout_value">0.3</small>
+                            <small>1.0</small>
+                        </div>
+                    </div>
+
+                    <!-- LSTM Settings -->
+                    <h6 class="text-success mt-4 mb-3">
+                        <i class="fas fa-project-diagram me-2"></i>LSTM Settings
+                    </h6>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="mb-3">
+                                <label for="embedding_dim" class="form-label">Embedding Dimension</label>
+                                <input type="number" class="form-control" id="embedding_dim" min="1">
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="mb-3">
+                                <label for="hidden_units" class="form-label">Hidden Units</label>
+                                <input type="number" class="form-control" id="hidden_units" min="1">
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="mb-3">
+                                <label for="lstm_activation" class="form-label">Activation</label>
+                                <select class="form-select" id="lstm_activation">
+                                    <option value="tanh">Tanh</option>
+                                    <option value="relu">ReLU</option>
+                                    <option value="sigmoid">Sigmoid</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-check form-switch mt-4">
+                                <input class="form-check-input" type="checkbox" id="bidirectional">
+                                <label class="form-check-label" for="bidirectional">
+                                    Bidirectional
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- CNN Settings -->
+                    <h6 class="text-success mt-4 mb-3">
+                        <i class="fas fa-layer-group me-2"></i>CNN Settings
+                    </h6>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="mb-3">
+                                <label for="filters" class="form-label">Filters</label>
+                                <input type="number" class="form-control" id="filters" min="1">
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="mb-3">
+                                <label for="kernel_size" class="form-label">Kernel Size</label>
+                                <input type="number" class="form-control" id="kernel_size" min="1">
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="mb-3">
+                                <label for="cnn_activation" class="form-label">Activation</label>
+                                <select class="form-select" id="cnn_activation">
+                                    <option value="relu">ReLU</option>
+                                    <option value="tanh">Tanh</option>
+                                    <option value="sigmoid">Sigmoid</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="mb-3">
+                                <label for="pooling" class="form-label">Pooling</label>
+                                <select class="form-select" id="pooling">
+                                    <option value="max">Max Pooling</option>
+                                    <option value="avg">Average Pooling</option>
+                                    <option value="global">Global Pooling</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Processing Configuration -->
+            <div class="card mb-4">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-microchip me-2"></i>Processing Configuration
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label for="max_len" class="form-label">Max Length</label>
+                                <input type="number" class="form-control" id="max_len" min="1">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label for="max_words" class="form-label">Max Words</label>
+                                <input type="number" class="form-control" id="max_words" min="1">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label for="test_size" class="form-label">Test Size</label>
+                                <input type="range" class="form-range" id="test_size" min="0.1" max="0.5" step="0.05">
+                                <div class="d-flex justify-content-between">
+                                    <small>0.1</small>
+                                    <small id="test_size_value">0.2</small>
+                                    <small>0.5</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label for="random_state" class="form-label">Random State</label>
+                                <input type="number" class="form-control" id="random_state" min="0">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-check form-switch mt-4">
+                                <input class="form-check-input" type="checkbox" id="normalize">
+                                <label class="form-check-label" for="normalize">
+                                    <strong>Normalize Data</strong>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-check form-switch mt-4">
+                                <input class="form-check-input" type="checkbox" id="stratify">
+                                <label class="form-check-label" for="stratify">
+                                    <strong>Stratify Split</strong>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Paths Configuration -->
+            <div class="card mb-4">
+                <div class="card-header bg-warning text-dark">
+                    <h5 class="mb-0">
+                        <i class="fas fa-folder me-2"></i>Paths Configuration
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label for="base_dir" class="form-label">Base Directory</label>
+                                <input type="text" class="form-control" id="base_dir">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label for="data_dir" class="form-label">Data Directory</label>
+                                <input type="text" class="form-control" id="data_dir">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label for="artifacts_dir" class="form-label">Artifacts Directory</label>
+                                <input type="text" class="form-control" id="artifacts_dir">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label for="model_path" class="form-label">Model Path</label>
+                                <input type="text" class="form-control" id="model_path">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label for="encoder_path" class="form-label">Encoder Path</label>
+                                <input type="text" class="form-control" id="encoder_path">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label for="tokenizer_path" class="form-label">Tokenizer Path</label>
+                                <input type="text" class="form-control" id="tokenizer_path">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="tflite_path" class="form-label">TensorFlow Lite Model Path</label>
+                        <input type="text" class="form-control" id="tflite_path">
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

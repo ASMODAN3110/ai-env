@@ -1,0 +1,63 @@
+{
+    "paths": {
+        "base_dir": "C:\\Users\\dunam\\PycharmProjects\\ai-env\\config",
+        "data_dir": "C:\\Users\\dunam\\PycharmProjects\\ai-env\\config\\data",
+        "artifacts_dir": "C:\\Users\\dunam\\PycharmProjects\\ai-env\\config\\artifacts"
+    },
+    "data": {
+        "task_type": "text_classification",
+        "text_data": {
+            "raw_path": "C:\\Users\\dunam\\PycharmProjects\\ai-env\\config\\data\\raw\\text_data.csv",
+            "processed_path": "C:\\Users\\dunam\\PycharmProjects\\ai-env\\config\\data\\processed\\text_data.csv",
+            "required_columns": [
+                "text"
+            ],
+            "label_columns": [
+                "label"
+            ]
+        },
+        "image_data": {
+            "image_dir": "C:\\Users\\dunam\\PycharmProjects\\ai-env\\config\\data\\images",
+            "labels_file": "C:\\Users\\dunam\\PycharmProjects\\ai-env\\config\\data\\labels.csv",
+            "image_format": "bmp",
+            "resize_to": [
+                240,
+                224
+            ],
+            "color_mode": "rgba"
+        },
+        "min_samples": 400,
+        "augment": false,
+        "balance_classes": true
+    },
+    "processing": {
+        "test_size": 0.2,
+        "random_state": 42,
+        "stratify": true,
+        "max_words": 5000,
+        "max_len": 100,
+        "normalize": true
+    },
+    "model": {
+        "architecture": "lstm",
+        "cnn": {
+            "filters": 32,
+            "kernel_size": 3,
+            "activation": "relu",
+            "pooling": "max"
+        },
+        "lstm": {
+            "embedding_dim": 64,
+            "hidden_units": 128,
+            "activation": "tanh",
+            "bidirectional": false
+        },
+        "epochs": 200,
+        "batch_size": 32,
+        "dropout_rate": 0.3,
+        "model_path": "C:\\Users\\dunam\\PycharmProjects\\ai-env\\config\\artifacts\\model.pth",
+        "tokenizer_path": "C:\\Users\\dunam\\PycharmProjects\\ai-env\\config\\artifacts\\tokenizer.pkl",
+        "encoder_path": "C:\\Users\\dunam\\PycharmProjects\\ai-env\\config\\artifacts\\encoder.pkl",
+        "tflite_path": "C:\\Users\\dunam\\PycharmProjects\\ai-env\\config\\artifacts\\model.tflite"
+    }
+}
